@@ -1,0 +1,16 @@
+# to install, include 
+#   source PATH/TO/.environment
+# in your .zhrc
+
+
+ZSH_THEME="flazz"
+
+runtestsdiff() {
+  MODIFIED="$(git --no-pager diff --name-only master)"
+  DIFFERENT="$(echo $MODIFIED | awk 'match($1, "^\.py")' | tr '\n' ' ')"  
+  eval "py.test -n0 $DIFFERENT"
+}
+
+runtestsmodified() {
+  py.test -n0 $(git status --porcelain */tests | awk 'match($1, "M"){print $2}')
+}
