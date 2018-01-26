@@ -14,3 +14,25 @@ runtestsdiff() {
 runtestsmodified() {
   py.test -n0 $(git status --porcelain */tests | awk 'match($1, "M"){print $2}')
 }
+
+# DATABASE ALIASES
+# list all current dbs
+alias listdb="psql -c 'select datname from pg_database where datistemplate=false;'"
+  
+# copy a db, useful for testing PRs locally that involve migrations
+# this is super useful for pulling down and testing PRs locally that may involve migrations without having to re-pull data down from champagne later when you are done testing the PR
+# usage: copydb (current db name) (new db name) 
+# copydb mats_db testing_pr_3123
+copydb() {
+  createdb -O $USERNAME -T $1 $2
+}
+  
+# sets current active db, tricky part is it is only for that terminal so if you have multiple open it can get fun
+setdb() {
+  export DATABASE_URL=postgresql://$USERNAME@localhost:5432/$1
+}
+  
+# which db is currently set as my active db
+whichdb() {
+  echo $DATABASE_URL
+}
