@@ -36,3 +36,33 @@ setdb() {
 whichdb() {
   echo $DATABASE_URL
 }
+
+### PYTHON
+
+start_python_project() {
+  if [ ! $1 ]; then
+    echo 'specify project name'
+    return
+  fi
+
+  PROJECT_NAME=$1
+  mkdir $PROJECT_NAME
+  cd $PROJECT_NAME
+
+  git init
+  touch .gitignore
+  echo "venv/*" > .gitignore
+
+  virtualenv venv
+  source venv/bin/activate
+}
+
+### AWS
+
+aws_download_bucket() {
+  if [ ! $1 ]; then
+    echo 'needs download bucket argument'
+    return
+  fi
+  BUCKET=$1 && mkdir $BUCKET && aws s3 sync s3://$BUCKET $BUCKET
+}
