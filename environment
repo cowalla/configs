@@ -57,6 +57,24 @@ start_python_project() {
   source venv/bin/activate
 }
 
+start_python3_project() {
+  if [ ! $1 ]; then
+    echo 'specify project name'
+    return
+  fi
+
+  PROJECT_NAME=$1
+  mkdir $PROJECT_NAME
+  cd $PROJECT_NAME
+
+  git init
+  touch .gitignore
+  echo "venv/*" > .gitignore
+
+  virtualenv --python=python3 venv
+  source venv/bin/activate
+}
+
 ### AWS
 
 aws_download_bucket() {
